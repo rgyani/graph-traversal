@@ -63,56 +63,37 @@ In terms of implementation, **BFS is usually implemented with Queue, while DFS u
 
 ```
 Say we want to find the Mininum Distance btetween points 0 to 4
-![img](images/d1.jpg)
+![img](images/djikstra.png)
 
-We use a Set to Store Vertices already encountered, say computed = {}  
-We use a map to store the minimum distance from origin (0), such that we hve the following map
+Dijkstra's algorithm adds nodes to the queue in the same order as Breadth-First-Search (BFS) does: when a node is tested its immediate neighbors are added to the queue.
+The difference is the way nodes are pulled out from the queue. While BFS does it in FIFO (first in first out) sequence, Dijkstra's algorithm does it by priority.
+The node with the highest priority is pulled out from the queue. The priority is set by the cost to get from the origin to that node.
+When the origin A is tested its immediate neighbors are added to the queue, so the queue holds 2 nodes :
 
+```
+B(10), C(3)
+```
 
-| Vertex | Distance |
-|---|---|
-| 0 | inf |
-| 1 | inf |
-| 2 | inf |
-| 3 | inf |
-| 4 | inf |
-| 5 | inf |
-| 6 | inf |
-| 7 | inf |
-| 8 | inf |
+For convenience I added the cost to each node's name.
+The next node to be pulled out of the queue and tested, is the one with the highest priority = lowest cost which is C. After testing C the queue looks like that:
 
-Now the first point is 0, which has a distance 0 to 0, and adjacent vertices 1 and 7, so we have 
+```
+B(7), E(5), D(11)
+```
 
-| | |
-|---|---|
-|![img](images/d2.jpg)|<table><th>Vertex</th><th>Distance</th><tr><td>0</td><td>0</td></tr><tr><td>1</td><td>INF</td></tr><tr><td>2</td><td>INF</td></tr><tr><td>3</td><td>INF</td></tr><tr><td>4</td><td>INF</td></tr><tr><td>5</td><td>INF</td></tr><tr><td>6</td><td>INF</td></tr><tr><td>7</td><td>INF</td></tr><tr><td>8</td><td>INF</td></tr></table>|
-|computed = {0}| available = {1, 7} |
+**The cost of B was updated from 10 to 7 because a path with a lower cost (A->C->B) was found.**  
+The next node to be pulled out of the queue is E. Testing E does not add add any of its neighbors (C,D) to the queue. C has already been tested , and D is in the queue.
+The queue after pulling E out looks like that:
 
-Now, from available, we find vertices not in set, which are 1 and 7 and minimum distance is 4 (for 1), so we update its distance in the set and update the values as
+B(7), D(11)
 
-| | |
-|---|---|
-|![img](images/d3.jpg)|<table><th>Vertex</th><th>Distance</th><tr><td>0</td><td>0</td></tr><tr><td>1</td><td>4</td></tr><tr><td>2</td><td>INF</td></tr><tr><td>3</td><td>INF</td></tr><tr><td>4</td><td>INF</td></tr><tr><td>5</td><td>INF</td></tr><tr><td>6</td><td>INF</td></tr><tr><td>7</td><td>INF</td></tr><tr><td>8</td><td>INF</td></tr></table>|
-|computed = {0, 1}| available = {7, 2} |
+B which has the highest priority (lowest cost from origin) is pulled out from the queue.  
+**Testing B updates the cost of D to 7+2 = 9.**   
+Now we have only D in the queue:
 
-Now distance from 0->2 is 0->1(4) + (1->2)(8) = 12, which is less than 0->7 (8), so we have
+D(9)
 
-| | |
-|---|---|
-|![img](images/d4.jpg)|<table><th>Vertex</th><th>Distance</th><tr><td>0</td><td>0</td></tr><tr><td>1</td><td>4</td></tr><tr><td>2</td><td>INF</td></tr><tr><td>3</td><td>INF</td></tr><tr><td>4</td><td>INF</td></tr><tr><td>5</td><td>INF</td></tr><tr><td>6</td><td>INF</td></tr><tr><td>7</td><td>8</td></tr><tr><td>8</td><td>INF</td></tr></table>|
-|computed = {0, 1, 7}| available = {2, 8, 6} |
-
-Continuing on,
-
-
-| | |
-|---|---|
-|![img](images/d5.jpg)|<table><th>Vertex</th><th>Distance</th><tr><td>0</td><td>0</td></tr><tr><td>1</td><td>4</td></tr><tr><td>2</td><td>INF</td></tr><tr><td>3</td><td>INF</td></tr><tr><td>4</td><td>INF</td></tr><tr><td>5</td><td>INF</td></tr><tr><td>6</td><td>9</td></tr><tr><td>7</td><td>8</td></tr><tr><td>8</td><td>INF</td></tr></table>|
-|computed = {0, 1, 7}| available = {2, 8, 6} |
-
-
-and so on, we get the final minimum distances from point 0 to all points as   
-![img](images/d-final.jpg)
+D is pulled out and because it it the target the search stops. The right shortest path having the cost of 9 has been found.
 
 
 
@@ -143,9 +124,13 @@ Bellman-Ford is also simpler than Dijkstra and suites well for distributed syste
 
 ```
 
+|   |   |
+|---|---|
+|![img](images/bf1.png) | Let the given source vertex be 0. Initialize all distances as infinite, except the distance to source itself. Total number of vertices in the graph is 5, so all edges must be processed 4 times.|
+|![img](images/bf2.png) | Let all edges are processed in following order: (B,E), (D,B), (B,D), (A,B), (A,C), (D,C), (B,C), (E,D). <br> We get following distances when all edges are processed first time. <br> The first row in shows initial distances. <br> The second row shows distances when edges (B,E), (D,B), (B,D) and (A,B) are processed. <br> The third row shows distances when (A,C) is processed. <br> The fourth row shows when (D,C), (B,C) and (E,D) are processed. |
+|![img](images/bf3.png) | The second iteration guarantees to give all shortest paths which are at most 2 edges long. The algorithm processes all edges 2 more times. The distances are minimized after the second iteration, so third and fourth iterations don’t update the distances. |
 
 
-![img](images/bf.png)
 
 ### Floyd–Warshall algorithm
 
