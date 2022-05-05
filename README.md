@@ -62,7 +62,7 @@ In terms of implementation, **BFS is usually implemented with Queue, while DFS u
     return dist[], prev[]
 
 ```
-Say we want to find the Mininum Distance btetween points 0 to 4
+Say we want to find the Mininum Distance between points A to D
 ![img](images/djikstra.png)
 
 Dijkstra's algorithm adds nodes to the queue in the same order as Breadth-First-Search (BFS) does: when a node is tested its immediate neighbors are added to the queue.
@@ -82,6 +82,8 @@ B(7), E(5), D(11)
 ```
 
 **The cost of B was updated from 10 to 7 because a path with a lower cost (A->C->B) was found.**  
+This happened, because when C was pulled out, we evaluated its neighbours and found B(10) > B(3 + 4)
+
 The next node to be pulled out of the queue is E. Testing E does not add add any of its neighbors (C,D) to the queue. C has already been tested , and D is in the queue.
 The queue after pulling E out looks like that:
 
