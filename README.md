@@ -27,9 +27,10 @@ In terms of implementation, **BFS is usually implemented with Queue, while DFS u
 
 ### Finding Shortest Path
 
-* Undirected graphs: Dijkstra's algorithm with list O(V^2) 
-    Used when Source vertex is known Solved using MinHeap + Map
-    A* achieves better performance by using heuristics to guide its search.
+* Undirected graphs: Dijkstra's algorithm with list O(V^2)   
+    Used when Source vertex is known.  
+    Solved using MinHeap + Map.  
+    A* achieves better performance by using heuristics to guide its search.  
 * Directed graphs with arbitrary weights without negative cycles:
   1. Bellman–Ford algorithm Time complexity O(VE)   
      Go thru all the edges of the graph, V-1 times and switch the map if distance[v] > distance[u] + weightEdge(u,v)
